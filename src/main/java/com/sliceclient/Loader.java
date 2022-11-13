@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
@@ -45,11 +46,18 @@ public enum Loader {
 
                             JSONObject classJson = new JSONObject(), fieldsJson = new JSONObject(), methodsJson = new JSONObject(), constructorsJson = new JSONObject();
 
-                            Arrays.stream(c.getDeclaredFields()).forEach((field -> fieldsJson.put(field.getName(), field.getType().getSimpleName())));
+                            Arrays.stream(c.getDeclaredFields()).forEach((field -> {
+                                JSONObject fieldJson = new JSONObject();
+                                fieldJson.put("name", field.getName());
+                                fieldJson.put("type", field.getType().getSimpleName());
+                                fieldJson.put("modifiers", Modifier.toString(field.getModifiers()));
+                            }));
+
                             Arrays.stream(c.getDeclaredMethods()).forEach((method -> {
                                 JSONObject methodJson = new JSONObject();
                                 methodJson.put("name", method.getName());
                                 methodJson.put("returnType", method.getReturnType().getSimpleName());
+                                methodJson.put("modifiers", Modifier.toString(method.getModifiers()));
 
                                 AtomicInteger arg = new AtomicInteger();
                                 JSONObject argsJson = new JSONObject();
@@ -75,7 +83,9 @@ public enum Loader {
                             classJson.put("methods", methodsJson);
                             classJson.put("fields", fieldsJson);
                             json.put(c.getName(), classJson);
-                        } catch (ClassNotFoundException | NoClassDefFoundError ignored) {}
+                        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             } catch (Exception e) {
