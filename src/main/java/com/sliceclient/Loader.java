@@ -83,9 +83,7 @@ public enum Loader {
                             classJson.put("methods", methodsJson);
                             classJson.put("fields", fieldsJson);
                             json.put(c.getName(), classJson);
-                        } catch (ClassNotFoundException | NoClassDefFoundError e) {
-                            e.printStackTrace();
-                        }
+                        } catch (ClassNotFoundException | NoClassDefFoundError ignored) {}
                     }
                 }
             } catch (Exception e) {
@@ -100,6 +98,7 @@ public enum Loader {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            System.out.println("Wrote " + file.getName().replace(".jar", ".json"));
         });
     }
 
