@@ -51,6 +51,8 @@ public enum Loader {
                                 fieldJson.put("name", field.getName());
                                 fieldJson.put("type", field.getType().getSimpleName());
                                 fieldJson.put("modifiers", Modifier.toString(field.getModifiers()));
+                                fieldsJson.put(field.getName(), fieldJson);
+                                System.out.println(field.getName());
                             }));
 
                             Arrays.stream(c.getDeclaredMethods()).forEach((method -> {
