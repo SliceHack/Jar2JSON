@@ -52,7 +52,6 @@ public enum Loader {
                                 fieldJson.put("type", field.getType().getSimpleName());
                                 fieldJson.put("modifiers", Modifier.toString(field.getModifiers()));
                                 fieldsJson.put(field.getName(), fieldJson);
-                                System.out.println(field.getName());
                             }));
 
                             Arrays.stream(c.getDeclaredMethods()).forEach((method -> {
@@ -81,6 +80,7 @@ public enum Loader {
                                 constructorsJson.put("constructor" + i.getAndIncrement(), constructorJson);
                             }));
 
+                            classJson.put("modifiers", Modifier.toString(c.getModifiers()));
                             classJson.put("constructors", constructorsJson);
                             classJson.put("methods", methodsJson);
                             classJson.put("fields", fieldsJson);
